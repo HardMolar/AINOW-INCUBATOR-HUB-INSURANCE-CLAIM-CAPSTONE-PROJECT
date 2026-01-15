@@ -46,7 +46,8 @@ Before analysis, the following data preparation steps were required:
    * Handled missing values
      ```python
      Insurance_Train_Data.isnull().sum()
-     ```     
+     ```
+       
    * Removed or treated inconsistent entries
    ```python
    Insurance_Train_Data.columns = (
@@ -56,10 +57,12 @@ Before analysis, the following data preparation steps were required:
     .str.replace(' ', '_')      #Replace spaces with underscores
    )
    ```
+
    * Replaced `"."` with NaN values
    ``` python
    Insurance_Train_Data.replace('.', np.nan, inplace=True)
    ```
+
    * Converting all features to numeric values using pd.to_numeric.
      ```python
      Insurance_Train_Data['building_dimension'] = pd.to_numeric(Insurance_Train_Data['building_dimension'], errors='coerce')
