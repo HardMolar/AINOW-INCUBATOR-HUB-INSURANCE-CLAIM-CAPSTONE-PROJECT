@@ -79,15 +79,19 @@ Before analysis, the following data preparation steps were required:
    * Distribution of target variables (Claim = 0/1).
      Certain demographic and policy variables show skewed distributions, indicating heterogeneous risk profiles.
      We used a Normalized Countplot (using hue). This allows us to compare the proportion of claims, which is more important than the raw total.
-     ```python
+ ```python
      plt.figure(figsize=(6,4))
      sns.countplot(x='claim', data=Insurance_Train_Data, palette='viridis')
      plt.title('Distribution of Insurance Claims (0 = No, 1 = Yes)')
      plt.savefig('Distribution of Insurance Claims.png', dpi=300, bbox_inches='tight')
      plt.show()
-     ```
+ ```
 
    ![Distribution of Target Variable - Claim](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/9604f7e7e38381acf60732833983629734377e0a/Visuals/Distribution%20of%20Insurance%20Claims.png?raw=true")
+
+
+	* Distribution of Building Dimension by Claim
+![[Distribution of Target Variable - Claim](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Building%20dimension%20distribution%20by%20claim.png?raw=true")
 
 
 
@@ -116,6 +120,7 @@ for col in num_cols:
     print(f"  - Total Outliers: {outliers_count}")
     print("-" * 30)
 ```
+	
 	* Capping Outliers
 ```python
 #define the capping function
@@ -148,7 +153,7 @@ print("Outliers have been capped successfully.")
 	  There is a symmetrical progression down from building type 1 to 4. This means my hypothesis is correct. Old buildings are riskier.
 	  If they are the same: Age might not be as important as other factors like Building_Dimension.
 
- ![Percentage Claims by Bulbing Types](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Percentage%20of%20Claims%20by%20Building%20Type.png?raw=true")
+ ![Percentage Claims by Building Types](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Percentage%20of%20Claims%20by%20Building%20Type.png?raw=true")
 
 
   * Distribution of Building_Age vs Claim. 
@@ -175,13 +180,12 @@ Used mapping technique for categorical columns like
   ** Garden
   ** Settlment
   ** For categorical column that has more than 2 variables, ( Building_Type), I used  LabelEncoder to encode the variables from categorical to numeric
-  ```python
+```python
 #Mapping some of the cartegorical coliumns
 Insurance_Train_Data['building_painted'] = Insurance_Train_Data['building_painted'].map({'N': 1, 'V': 1})
 Insurance_Train_Data['building_fenced'] = Insurance_Train_Data['building_fenced'].map({'N': 0, 'V': 1})
 Insurance_Train_Data['garden'] = Insurance_Train_Data['garden'].map({'V': 1, 'O': 0})
 Insurance_Train_Data['settlement'] = Insurance_Train_Data['settlement'].map({'U': 1, 'R': 0})
-
 #Using Label Encoder to encode Building Type column
 from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
@@ -192,9 +196,7 @@ Insurance_Train_Data['building_type'] = le.fit_transform(Insurance_Train_Data['b
 This mathematically shows the correlation between out target(Claim) and every other numeric variables.
 Helps to focus on the variables that actually move the needle for the insurance company.
 
-![Correlation Matrix](Visuals/Correlation%20Matrix.png)
-
-
+  ![Correlation Heat Map](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Correlation%20Matrix.png?raw=true")
 
 
  * Feature selection
@@ -242,8 +244,10 @@ print("Success! Data is perfectly cleaned and scaled" )
 Feature Engineering revealed a significant "Risk Gap" based of building age. By categorizing the "Building Age" into Mordern and Historical, we validated that older structure have a significantly higher claim frequency. This allowed our model(Logistics Regression) to assign higher risk weights to historical properties, directly improving the model's F-1 score
  * Bivariate analysis reveals that Historic buildings (50+ years) have a higher claim frequency compared to modern structures. This justifies the inclusion of 'Is_Historic' as a key feature for our predictive models.".
  * Target variable balance assessment: The target variable (insurance claim) appears imbalanced, with non-claims dominating.
- * 
- <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+   
+
+  ![Correlation Heat Map](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Claims%20Probability.png?raw=true")
+
   
 
 ## 🧠 Model Building
@@ -255,16 +259,17 @@ We tested three distinct models to see which one understood the insurance risks 
 
  * Model Initialization
    ** Logistics Regression
-   ```python
+```python
    og_model = LogisticRegression(
     max_iter=1000, 
     random_state=42, 
     class_weight='balanced',
     solver='liblinear'
    )
-   ```
+```
+  
    ** Random Forest
-  ```python
+```python
   rf_model = RandomForestClassifier(
     n_estimators=100, 
     random_state=42,
@@ -273,9 +278,10 @@ We tested three distinct models to see which one understood the insurance risks 
     max_leaf_nodes=6,
    class_weight='balanced'
    )
-   ```
+```
+   
    ** XGBoost
-   ```python
+```python
    xgb_model = XGBClassifier(
     n_estimators=100,
     learning_rate=0.1,
@@ -284,26 +290,28 @@ We tested three distinct models to see which one understood the insurance risks 
     use_label_encoder=False,
     eval_metric='logloss'    
    )
-   ```
+```
      
  * Model training on training dataset
   ** Logistic Regression:
-  ```python
+```python
   log_model.fit(X-train, y_train)
-  ```
+```
+
   ** Random Forest
-  ```python
+```python
   rf_model.fir(X_train, y_train)
-  ``` 
+``` 
+
  ** XGBoost: xgb_model.fit(X-train, y_train)
-  ```python
+```python
   xgb_model.fir(X_train, y_train)
-  ``` 
+``` 
 
 ## 📌 Model Evaluation
   * Accuracy
   * Confusion Matrix
-     <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+      ![onfusion Matrix](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Confusion%20Matrix.png?raw=true")
 
 
    
@@ -320,8 +328,9 @@ To ensure this wasn't just a "lucky guess," iperformed 5-Fold Cross-Validation.
 | Random Forest               | 0.716015 |  0.402913   | 0.508163 | 0.449458  |    
 | XGBoost                     | 0.784451 |  0.577143   | 0.206122 | 0.303759  | 
 
- <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
-  
+  ![Prediction Chat](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Prediction%20Chat.png?raw=true")
+
+
   ** Based on these metrics, Logistic Regression is actually the winner, but with a very important "Insurance Business" reason why.
   Why Logistic Regression wins here?
   In insurance, F1-Score is more important because it is the "balance" between being right (Precision) and not missing anyone (Recall).
@@ -334,7 +343,8 @@ To ensure this wasn't just a "lucky guess," iperformed 5-Fold Cross-Validation.
   * Certain demographic and policy-related features strongly influence claim likelihood
   * Class imbalance affects prediction outcomes and should be addressed in future iterations
 
- <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+  ![Confusion Matrix](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Confusion%20Matrix.png?raw=true")
+
 
 
 ## ⚠️ Limitations
