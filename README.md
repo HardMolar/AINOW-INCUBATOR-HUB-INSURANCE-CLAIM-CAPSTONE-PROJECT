@@ -90,7 +90,7 @@ Before analysis, the following data preparation steps were required:
    ![Distribution of Target Variable - Claim](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/9604f7e7e38381acf60732833983629734377e0a/Visuals/Distribution%20of%20Insurance%20Claims.png?raw=true")
 
 
-  
+
    * Distribution of outliers in the variables Bilding_Types, Building_Dimension and Building_Age. 
 ```python
      # Define the crucial numerical features for outliers
@@ -138,7 +138,10 @@ Insurance_Train_Data = cap_outliers(Insurance_Train_Data, num_cols)
 print("Outliers have been capped successfully.")
 ```
 
-   <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+   ![Distribution of Outliers](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/9604f7e7e38381acf60732833983629734377e0a/Visuals/Distribution%20of%20Insurance%20Claims.png?raw=true")
+
+
+    ![Distribution of Building Dimensions by Claim Status](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/9604f7e7e38381acf60732833983629734377e0a/Visuals/Distribution%20of%20Insurance%20Claims.png?raw=true")
 
    
    * Bivariate analysis:
