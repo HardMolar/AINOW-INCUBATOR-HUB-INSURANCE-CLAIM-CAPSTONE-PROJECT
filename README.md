@@ -91,7 +91,7 @@ Before analysis, the following data preparation steps were required:
 
 
 	* Distribution of Building Dimension by Claim
-![[Distribution of Target Variable - Claim](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Building%20dimension%20distribution%20by%20claim.png?raw=true")
+![Distribution of Target Variable by Claim](https://github.com/HardMolar/AINOW-INCUBATOR-HUB-INSURANCE-CLAIM-CAPSTONE-PROJECT/blob/f16b65d94ee5ba51156e221e1b3c164ce561d9ee/Visuals/Building%20dimension%20distribution%20by%20claim.png?raw=true")
 
 
 
