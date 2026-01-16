@@ -88,7 +88,8 @@ Before analysis, the following data preparation steps were required:
      ```
    <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
 
-   * Distribution of outliers in the variables Bilding_Types, Building_Dimension and Building_Age. Capping Outliers 
+  
+   * Distribution of outliers in the variables Bilding_Types, Building_Dimension and Building_Age. 
 ```python
      # Define the crucial numerical features for outliers
 num_cols = ['building_dimension', 'building_type', 'building_age'] 
@@ -113,6 +114,7 @@ for col in num_cols:
     print(f"  - Total Outliers: {outliers_count}")
     print("-" * 30)
 ```
+	* Capping Outliers
 ```python
 #define the capping function
 
@@ -136,6 +138,7 @@ print("Outliers have been capped successfully.")
 
    <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
 
+   
    * Bivariate analysis:
    ** Categorical feature exploration
    *** Categorical vs Target: 
@@ -145,15 +148,18 @@ print("Outliers have been capped successfully.")
 
 <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
 
+
   * Distribution of Building_Age vs Claim. 
-Visualized this using violon plot, so as to graphically view if the risk is higher for very old buildings or new ones.
+Visualized this using violin plot, so as to graphically view if the risk is higher for very old buildings or new ones.
 
  <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+
  
   * Bulding Dimension vs Age
 Scatterplot to visualize the analysis of relationship between the two variables. This is important to ensure that there is no redundant data (Multi-collinearity)
 
  <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+
 
 
 ##  Feature Engineering
@@ -179,12 +185,19 @@ from sklearn.preprocessing import LabelEncoder
 le = LabelEncoder()
 Insurance_Train_Data['building_type'] = le.fit_transform(Insurance_Train_Data['building_type'].astype(str))
 ```
+ *Correlation Matrix Heat Map
+This mathematically shows the correlation between out target(Claim) and every other numeric variables.
+Helps to focus on the variables that actually move the needle for the insurance company.
+
+ <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+
 
  * Feature selection
   ** Train-test split
- Data splitting was done using 70% to train, 30% to test.
+ I chose to split the data using 70% to train, 30% to test, random state was 42 and stratify as y.
 
  * Standardization: The NumberOfWindows feature contained mixed types, including the string '>=10'. I standardized this by converting the upper-bound string to a discrete integer and performing median imputation on missing values. This preserves the ordinal nature of the data while making it compatible with the regression and tree-based algorithms."
+
 ```python
 #Adjusting the >=10 values in Number of windows column
 #Strip any leading/trailing spaces
@@ -286,11 +299,10 @@ We tested three distinct models to see which one understood the insurance risks 
   * Accuracy
   * Confusion Matrix
      <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
- 
-  * Comparing the Classification metrics (Precision, Recall, F1-score) of the 3 models
- 
+
+
    
-## 🧠 Insights Generated
+### 🧠  Comparing the Classification metrics (Precision, Recall, F1-score) of the 3 models
 Instead of just looking at Accuracy (which can be misleading in insurance where claims are rare), I prioritized the **F1-Score** to balance Precision (avoiding false alarms) and Recall (catching actual claims).
   * Key Finding: While Logistic Regression provided a solid foundation and it was considered for the project, XGBoost has a high accuracy but lowest F1 score.
    ** Interpretation: The model achieved an F1-score of [0.46], meaning it successfully balanced the need to catch actual claims (Recall) without raising too many false alarms (Precision).
@@ -318,6 +330,8 @@ To ensure this wasn't just a "lucky guess," iperformed 5-Fold Cross-Validation.
   * Class imbalance affects prediction outcomes and should be addressed in future iterations
 
  <img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
+
+
 ## ⚠️ Limitations
   * Class imbalance in claim vs non-claim observations
   * Limited feature granularity
@@ -326,161 +340,6 @@ To ensure this wasn't just a "lucky guess," iperformed 5-Fold Cross-Validation.
 ## 💡 Key Insights
   * Feature Importance: `Building_Dimension` and `Date_of_Occupancy` were the strongest predictors of claim likelihood.
   * Business Value: The model allows for proactive risk management and more competitive pricing for low-risk clients.
-
-
----
-
-
-  **Gender distribution across all region**
-  Overall Staffs: 946
-  Female: 441
-  Male: 465
-  Neutral: 40
-  
-  **Staff distribution across all region**
-  
-  Lagos: 250(26.43%)
-  Abuja: 335(35.41%)
-  Kaduna: 361(38.16%)
-  
-  **Gender distribution across all departments**
-    
-| Department                  | Neutral | Male   | Female  |
-|-----------------------------|---------|--------|---------|
-| Product Management          | 1       | 47     | 41      |
-| Legal                       | 5       | 49     | 34      |
-| Human Resource              | 3       | 38     | 41      |
-| Services                    | 3       | 37     | 42      |
-| Business Development        | 3       | 37     | 41      |
-| Support                     | 4       | 42     | 35      |
-| Engineering                 | 6       | 36     | 38      |
-| Sales                       | 4       | 40     | 36      | 
-| Training                    | 3       | 38     | 36      |
-| Research and Develpment     | 5       | 31     | 38      |
-| Accounting                  | 2       | 37     | 28      |
-| Marketing                   | 1       | 33     | 31      |
-
-<img width="794" height="445" alt="HD1" src="https://github.com/user-attachments/assets/1958c2bb-6d8b-48a7-9ae9-ac7feea15dae" />
-
-2. Ratings based on Gender
-Clustered chattered chat shows performance trends by gender and Line chat to show rating comparison by gender
-  
-| Rating                      | Neutral | Male   | Female  |
-|-----------------------------|---------|--------|---------|
-| Average  		                 | 18      | 212    | 190     |
-| Good                        | 9       | 82     | 89      |
-| Poor             	          | 5       | 70     | 58      |
-| Very Good                   | 3       | 37     | 42      |
-| Not Rated        	      `   | 2       | 34     | 35      |
-| Very Poor                   | 3       | 31     | 20      |
-
-![BI_002](https://github.com/user-attachments/assets/d2bd0969-5578-4c42-be82-6fea9768b32a)
-
-3. Salary Structure Analysis across all departments and region
-* Detected gender pay gaps across certain departments/regions
-* Highlighted departments and regions for leadership focus
-  
-**Overall departmental payment per gender**
-
-| Gender                      | High Pay              | Low Pay        |
-|-----------------------------|-----------------------|----------------|
-| Neutral  		                 | Marketing             | Human Resources|
-| Male                        | Bisuness Development  | Engineering    |
-| Female             	        | Marketing             | Human Resources|
-
-**Average Salary Per gender**
-Neutral: $78,367.50
-Male: $74,789.53
-Female: $72,135.69
-
-```dax
-Average Salary = AVERAGE('Palmoria Group emp-data'[Salary])
-```
-
-**Regional payment gap per gender**
-**Abuja**
-| Gender                      | Departmets that pay high                                       |        
-|-----------------------------|----------------------------------------------------------------|
-| Neutral  		                 | Marketing,Accounting, Human Resources, Research and Development|
-| Male                        | Marketing                                                      |
-| Female             	        | Marketing                                                      |
-
-**Lagos**
-| Gender                      | Departmets that pay high          |        
-|-----------------------------|-----------------------------------|
-| Neutral  		                 | Accounting, Legal                 |
-| Male                        | Accounting, Training              |
-| Female             	        | Accounting                        |
-
-**Kaduna**
-| Gender                      | Departmets that pay high          |        
-|-----------------------------|-----------------------------------|
-| Neutral  		                 | Training, Sales                   |
-| Male                        | Accounting, Training              |
-| Female             	        | Engineering                       |
-
-![BI_003](https://github.com/user-attachments/assets/ead7b2b9-a60c-4db9-b784-42cdb9a8a778)
-
-
-4a. Minimum Salary Compliance
-Analyzed employees earning below the $90,000 threshold, which = **654(69.13%)**
-This is indeed a red flag 🚩 because more than 50% of the total employee are being paid below the recomended minimum salary threshhold.
-
-```dax
-Employees Below Minimum Salary = COUNTX(FILTER('Palmoria Group emp-data', 'Palmoria Group emp-data'[Salary] < 90000), 'Palmoria Group emp-data'[Name])
-```
-
-![BI_004a](https://github.com/user-attachments/assets/332fc32a-9866-4403-ab99-b872e2d2abb8)
-
-
-4b. Salary Bands Distribution across all region
-
-| Salary Band ($)             | Employee Count    |        
-|-----------------------------|-------------------|
-| >100,000 		                 | 202               |
-| 90,001 - 100,000            | 90                |
-| 80,001 - 90,000             | 108               |
-| 70,001 - 80,000             | 117               |
-| 60,001 - 70,000             | 99                |
-| 50,001 - 60,000             | 96                |
-| 40,001 - 50,000             | 105               |
-| 30,001 - 40,000             | 101               |
-| 20,001 - 30,000             | 28                |
-| **Total**                   | **946**           |
-
-![BI_004b](https://github.com/user-attachments/assets/f848e481-e2de-4a89-9d84-b7aecf13ef95)
-
-
-4c. Visualized by gender and region for comparative analysis
-
-5a. Bonus Allocation
-Calculated bonus per employee based on performance criteria
-Computed:
-Bonus amount per employee
-
-```dax
-Bonus Amount = SUMX('Palmoria Group emp-data', 'Palmoria Group emp-data'[Salary] * LOOKUPVALUE('Bonus Rules'[Value], 'Bonus Rules'[Department Rating], 'Palmoria Group emp-data'[Department Rating]))
-```
-
-5b. Total amount to be paid
-
-```dax
-Total Amount to be Paid = SUMX('Palmoria Group emp-data', 'Palmoria Group emp-data'[Salary] + [Bonus Amount])
-```
-
-![BI_005a:b](https://github.com/user-attachments/assets/aa851520-ae4d-4308-a848-151b8d0908ca)
-
-5c. Regional and company-wide bonus payout totals
-
-**Regional Payment**
-kaduna = $27.48 million
-Abuja = $24.93 million
-Lagos = $19.53 million
-
-**Company-Wide Payment**
-$71.94 million
-
-![BI_005c](https://github.com/user-attachments/assets/6e02d9dd-db52-43c2-b1d2-7e1f36d732e5)
 
 
 ## ✅ Recomendations
